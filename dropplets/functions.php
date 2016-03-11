@@ -9,8 +9,15 @@ include('./dropplets/includes/markdown.php');
 include('./dropplets/includes/phpass.php');
 include('./dropplets/includes/actions.php');
 
-function var_log($var) {
-	error_log(var_export($var));
+/**
+ * Utility function for logging
+ *
+ * @param mixed $stuff The thing to be logged
+ * @since 1.6
+ * @link https://github.com/INN/Largo/blob/84b67163c61d6cd30912d8bc09f9f06e4e084cbd/inc/helpers.php#L277-L286
+ */
+function var_log($stuff) {
+	error_log(var_export($stuff, true));
 }
 
 /*-----------------------------------------------------------------------------------*/
@@ -89,40 +96,67 @@ function get_posts_for_category($category) {
     return get_all_posts(array("category" => $category));
 }
 
-/*-----------------------------------------------------------------------------------*/
-/* Post Pagination
-/*-----------------------------------------------------------------------------------*/
-
+/**
+ * Output the pagination selector for the blog, being a ul of li elements with the active page as an li.active
+ *
+ * @param int $page The current-page parameter from $_GET
+ * @param int $total The number of posts divided by the number of posts per page, rounded up
+ * @since 1.5
+ */
 function get_pagination($page,$total) {
 
-    $string = '';
-    $string .= "<ul style=\"list-style:none; width:400px; margin:15px auto;\">";
+	$string = '';
+	$string .= '<ul class="pagination">';
 
-    for ($i = 1; $i<=$total;$i++) {
-        if ($i == $page) {
-            $string .= "<li style='display: inline-block; margin:5px;' class=\"active\"><a class=\"button\" href='#'>".$i."</a></li>";
-        } else {
-            $string .=  "<li style='display: inline-block; margin:5px;'><a class=\"button\" href=\"?page=".$i."\">".$i."</a></li>";
-        }
-    }
-    
-    $string .= "</ul>";
-    return $string;
+	// Increment a number until it reaches the number of pages in the system
+	// For each number, output `li a.button`
+	// If the number is the current page, output `li.active a.button`
+	for ( $i = 1; $i <= $total; $i++ ) {
+		if ($i == $page) {
+			$string .= '<li class="active"><a class="button" href="#">' . $i . '</a></li>';
+		} else {
+			$string .=  '<li><a class="button" href="?page=' . $i . '">' . $i . '</a></li>';
+		}
+	}
+
+	$string .= "</ul>";
+	return $string;
 }
 
 /*-----------------------------------------------------------------------------------*/
 /* If is Home (Could use "is_single", "is_category" as well.)
 /*-----------------------------------------------------------------------------------*/
 
-$homepage = BLOG_URL;
+/**
+ * Define the global for whether or not this is home
+ *
+ * New in 1.6: TRUE when it's paginated.
+ * @since 1.6
+ */
+function is_home( $filename, $page ) {
+	// Get the current URL
+	$homepage = BLOG_URL;
 
-// Get the current page.    
-$currentpage  = @( $_SERVER["HTTPS"] != 'on' ) ? 'http://'.$_SERVER["SERVER_NAME"] : 'https://'.$_SERVER["SERVER_NAME"];
-$currentpage .= $_SERVER["REQUEST_URI"];
+	// Get the current page.
+	$currentpage  = @( $_SERVER["HTTPS"] != 'on' ) ? 'http://'.$_SERVER["SERVER_NAME"] : 'https://'.$_SERVER["SERVER_NAME"];
+	$currentpage .= $_SERVER["REQUEST_URI"];
 
-// If is home.
-$is_home = ($homepage==$currentpage);
-define('IS_HOME', $is_home);
+	// Create the output
+	if ( $homepage == $currentpage ) {
+		$is_home = true;
+	} else if ( empty($filename) && $page >= 1 ) {
+		$is_home = true;
+	} else {
+		$is_home = false;
+	}
+
+	// If this isn't defined yet, do so.
+	if ( ! defined( 'IS_HOME' ) ) {
+		define('IS_HOME', $is_home);
+	}
+
+	return $is_home;
+}
 
 /*-----------------------------------------------------------------------------------*/
 /* Get Profile Image (This Needs to be Cached)

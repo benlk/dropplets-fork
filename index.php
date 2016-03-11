@@ -15,17 +15,26 @@ if (file_exists('./config.php')) {
 include('./dropplets/settings.php');
 include('./dropplets/functions.php');
 
-/*-----------------------------------------------------------------------------------*/
-/* Reading File Names
-/*-----------------------------------------------------------------------------------*/
-
+/**
+ * Set us up the vars
+ * @since 1.6
+ */
 $category = NULL;
+$filename = NULL;
+$page = ( isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 1 ) ? $_GET['page'] : 1;
+$pagination = NULL;
+
+/**
+ * Define $filename
+ *
+ * @since 1.5
+ */
+
 if (empty($_GET['filename'])) {
     $filename = NULL;
-} else if($_GET['filename'] == 'rss' || $_GET['filename'] == 'atom') {
+} else if($_GET['filename'] === 'rss' || $_GET['filename'] === 'atom') {
     $filename = $_GET['filename'];
 }  else {
-    
     //Filename can be /some/blog/post-filename.md We should get the last part only
     $filename = explode('/',$_GET['filename']);
 
@@ -34,11 +43,12 @@ if (empty($_GET['filename'])) {
         $category = $filename[count($filename) - 1];
         $filename = null;
     } else {
-      
         // Individual Post
         $filename = POSTS_DIR . $filename[count($filename) - 1] . FILE_EXT;
     }
 }
+
+$is_home = is_home( $filename, $page );
 
 /*-----------------------------------------------------------------------------------*/
 /* The Home Page (All Posts)
@@ -47,7 +57,7 @@ if (empty($_GET['filename'])) {
 if ($filename==NULL) {
 	define('IS_SINGLE', false);
 
-    $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 1) ? $_GET['page'] : 1;
+	// Set the value of $page to $_GET['page'] if it's correct and useful; otherwise 1.
     $offset = ($page == 1) ? 0 : ($page - 1) * $posts_per_page;
 
     //Index page cache file name, will be used if index_cache = "on"
