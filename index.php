@@ -12,8 +12,8 @@ if (file_exists('./config.php')) {
 /* Get Settings & Functions
 /*-----------------------------------------------------------------------------------*/
 
-include('./dropplets/settings.php');
-include('./dropplets/functions.php');
+require_once('./dropplets/settings.php');
+require_once('./dropplets/functions.php');
 
 /**
  * Set us up the vars
@@ -252,7 +252,7 @@ else if ($filename == 'rss' || $filename == 'atom') {
 				unset($remove_metadata_from[0], $remove_metadata_from[1], $remove_metadata_from[2], $remove_metadata_from[3], $remove_metadata_from[4], $remove_metadata_from[5]);
 				$remove_metadata_from = array_values($remove_metadata_from);
 
-                $item->setDescription(Markdown(implode($remove_metadata_from)));
+                $item->setDescription(markdown(implode($remove_metadata_from)));
 
                 $feed->addItem($item);
                 $c++;
@@ -378,9 +378,9 @@ else {
         unset($file_array[4]);
         unset($file_array[5]);
         unset($file_array[6]);
-        
-        $post_content = Markdown(implode("", $file_array));
-                
+
+        $post_content = markdown(implode("", $file_array));
+
         // Get the site title.
         $page_title = str_replace('# ', '', $fcontents[0]);
 
@@ -409,7 +409,7 @@ else {
         $page_meta = implode("\n", $get_page_meta);
 
         // Generate the post.
-        $post = Markdown(join('', $fcontents));
+        $post = markdown(join('', $fcontents));
 
         // Get the post template file.
         include $post_file;

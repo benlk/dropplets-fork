@@ -5,9 +5,23 @@
 /*-----------------------------------------------------------------------------------*/
 
 include('./dropplets/includes/feedwriter.php');
-include('./dropplets/includes/markdown.php');
+require_once('./dropplets/includes/php-markdown/Michelf/MarkdownExtra.inc.php');
 include('./dropplets/includes/phpass.php');
 include('./dropplets/includes/actions.php');
+
+/**
+ * Create an alias for the standard markdown function.
+ *
+ * @param string $text
+ * @return string HTML content parsed by the PHP Markdown Extra function
+ * @link https://michelf.ca/projects/php-markdown/extra/
+ * @since 1.1
+ */
+if ( ! function_exists( 'markdown' ) ) {
+	function markdown($text) {
+		return Michelf\MarkdownExtra::defaultTransform($text);
+	}
+}
 
 /**
  * Utility function for logging
@@ -39,7 +53,7 @@ function get_all_posts($options = array()) {
                 $fcontents = file(POSTS_DIR.$entry);
 
                 // Define the post title.
-                $post_title = Markdown($fcontents[0]);
+                $post_title = markdown($fcontents[0]);
 
                 // Define the post author.
                 $post_author = str_replace(array("\n", '-'), '', $fcontents[1]);
@@ -62,10 +76,10 @@ function get_all_posts($options = array()) {
                 $post_status = str_replace(array("\n", '- '), '', $fcontents[5]);
 
                 // Define the post intro.
-                $post_intro = Markdown($fcontents[7]);
+                $post_intro = markdown($fcontents[7]);
 
                 // Define the post content
-                $post_content = Markdown(join('', array_slice($fcontents, 6, sizeof($fcontents) -1)));
+                $post_content = markdown(join('', array_slice($fcontents, 6, sizeof($fcontents) -1)));
 
                 // Pull everything together for the loop.
                 $files[] = array('fname' => $entry, 'post_title' => $post_title, 'post_author' => $post_author, 'post_author_twitter' => $post_author_twitter, 'post_date' => $post_date, 'post_category' => $post_category, 'post_status' => $post_status, 'post_intro' => $post_intro, 'post_content' => $post_content);
