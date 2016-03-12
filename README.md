@@ -20,7 +20,7 @@ Markdown is a text formatting syntax inspired on plain text email. It is extreme
 - [3rd Party Templates](#3rd-party-templates)
 - [Updating Dropplets](#updating-dropplets)
 - [Changelog](#changelog)
-- [License](#license)
+- [License](./LICENSE)
 
 ## Installation
 Dropplets is compatible with most server configurations and can be typically installed in under a minute using the few step-by-step instructions below:
