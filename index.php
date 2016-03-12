@@ -99,10 +99,16 @@ if ($filename==NULL) {
             $post_author_twitter = $post['post_author_twitter'];
 
             // Get the published ISO date.
-            $published_iso_date = $post['post_date'];
+            $published_iso_date = trim($post['post_date']);
 
-            // Generate the published date.
-            $published_date = date_format(date_create($published_iso_date, new DateTimeZone('America/New_York') ), $date_format);
+			// What if the ISO date isn't one?
+			if ( !is_numeric($published_iso_date) ) {
+				$published_iso_date = 0;
+				$published_date = '';
+			} else {
+				// Generate the published date.
+				$published_date = date_format(date_create($published_iso_date, new DateTimeZone('America/New_York') ), $date_format);
+			}
 
             // Get the post category.
             $post_category = $post['post_category'];
@@ -339,7 +345,7 @@ else {
         $published_iso_date = str_replace('-', '', $fcontents[3]);
 
         // Generate the published date.
-        $published_date = date_format(date_create($published_iso_date), $date_format);
+		$published_date = date_format(date_create($published_iso_date, new DateTimeZone('America/New_York') ), $date_format);
 
         // Get the post category.
         $post_category = str_replace(array("\n", '-'), '', $fcontents[4]);
