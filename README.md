@@ -1,14 +1,9 @@
-Dropplets
-=========
+# Dropplets
 
-> [v1.0.8](#version-108)
-
-Dropplets is a minimalist **Markdown** blogging platform focused on delivering just what you need in a blogging solution, but absolutely nothing you don't. When it comes to basic blogging, all you really want to do is write & publish which is where Dropplets excels. It's databaseless, so it installs on any server in just about 30 seconds. 
+Dropplets is a minimalist **Markdown** blogging platform focused on delivering just what you need in a blogging solution, but absolutely nothing you don't. When it comes to basic blogging, all you really want to do is write & publish which is where Dropplets excels. It's databaseless, so it installs on any server in just about 30 seconds. (asterisk: You may need to fix permissions.)
 
 ## What's Markdown?
 Markdown is a text formatting syntax inspired on plain text email. It is extremely simple, memorizable and visually lightweight on artifacts so as not to hinder reading.
-
-> The idea is that a Markdown-formatted document should be publishable as-is, as plain text, without looking like it's been marked up with tags or formatting instructions.
 
 ## Getting Started
 - [Installation](#installation)
@@ -20,6 +15,7 @@ Markdown is a text formatting syntax inspired on plain text email. It is extreme
 - [3rd Party Templates](#3rd-party-templates)
 - [Updating Dropplets](#updating-dropplets)
 - [Changelog](#changelog)
+- [Roadmap](docs/roadmap.md)
 - [License](./LICENSE)
 
 ## Installation
