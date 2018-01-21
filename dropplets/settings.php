@@ -60,8 +60,7 @@ define('INFINITE_SCROLL', $infinite_scroll);
 $post_directory = './posts/';
 $cache_directory = './posts/cache/';
 
-if (glob($post_directory . '*.md') != false)
-{
+if (glob($post_directory . '*.md') != false) {
     $posts_dir = './posts/';
 } else {
     $posts_dir = './dropplets/welcome/';
